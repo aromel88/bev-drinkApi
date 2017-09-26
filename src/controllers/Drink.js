@@ -2,9 +2,14 @@ const models = require('../models');
 
 const Drink = models.Drink;
 
+/**
+ * handle GET request for drink by name
+ * @param req - request object
+ * @param res - response object
+ */
 const findDrinkByName = (req, res) => {
-  console.log(req.body.name);
-  return Drink.DrinkModel.findByName(req.body.name, (err, doc) => {
+  const name = `${req.params.name}`;
+  return Drink.DrinkModel.findByName(name, (err, doc) => {
     if (err) {
       console.dir(err);
       return res.status(400).json({
@@ -17,9 +22,12 @@ const findDrinkByName = (req, res) => {
   });
 };
 
-
+/**
+ * handle POST request for creation of new drink
+ * @param req - request object
+ * @param res - response object
+ */
 const makeDrink = (req, res) => {
-  console.dir(req.body);
   if (!req.body.name || !req.body.ingredients) {
     return res.status(400).json({
       status: 400,
@@ -39,7 +47,7 @@ const makeDrink = (req, res) => {
     if (err) {
       return res.status(400).json({
         status: 400,
-        message: 'An error occured saving drink data',
+        message: 'An error occurred saving drink data',
         error: err,
       });
     }

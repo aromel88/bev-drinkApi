@@ -42,7 +42,7 @@ DrinkSchema.statics.toAPI = doc => ({
 
 DrinkSchema.statics.findByName = (name, callback) => {
 
-  return DrinkModel.findOne({ name: name }).select('description ingredients name').exec(callback);
+  return DrinkModel.findOne({ name }).select('description ingredients name').exec(callback);
 };
 
 DrinkModel = mongoose.model('Drink', DrinkSchema);
