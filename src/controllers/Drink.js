@@ -11,14 +11,13 @@ const findDrinkByName = (req, res) => {
   const name = `${req.params.name}`;
   return Drink.DrinkModel.findByName(name, (err, doc) => {
     if (err) {
-      console.dir(err);
       return res.status(400).json({
         status: 400,
         message: 'Error in findDrinkByName',
         error: err,
       });
     }
-    return res.json(doc);
+    return res.status(200).json(doc);
   });
 };
 
@@ -38,12 +37,13 @@ const makeDrink = (req, res) => {
   const drinkData = {
     description: req.body.description,
     ingredients: req.body.ingredients,
+    instructions: req.body.instructions,
     name: req.body.name,
   };
 
   const newDrink = new Drink.DrinkModel(drinkData);
 
-  return newDrink.save((err) => {
+  return newDrink.save((err, doc) => {
     if (err) {
       return res.status(400).json({
         status: 400,
@@ -52,11 +52,7 @@ const makeDrink = (req, res) => {
       });
     }
 
-    return res.status(200).json({
-      status: 200,
-      message: 'Successfully created drink',
-      data: drinkData,
-    });
+    return res.status(200).json(doc);
   });
 };
 

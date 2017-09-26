@@ -24,15 +24,39 @@ const DrinkSchema = new mongoose.Schema({
     trim: true,
   },
   ingredients: {
+    type: [{
+      amount: {
+        type: Number,
+        required: true,
+        default: 1,
+      },
+      brand: {
+        type: String,
+        default: '',
+      },
+      measure: {
+        type: String,
+        required: true,
+        default: 'oz',
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+      ref: {
+        type: mongoose.Schema.Types.ObjectId,
+      },
+      type: {
+        type: String,
+        required: true,
+      },
+    }],
     required: true,
-    type: [String],
   },
-  //
-  // owner: {
-  //   type: mongoose.Schema.ObjectId,
-  //   required: true,
-  //   ref: 'Account',
-  // },
+  instructions: {
+    type: String,
+    default: '',
+  }
 });
 
 DrinkSchema.statics.toAPI = doc => ({
@@ -41,7 +65,6 @@ DrinkSchema.statics.toAPI = doc => ({
 });
 
 DrinkSchema.statics.findByName = (name, callback) => {
-
   return DrinkModel.findOne({ name }).select('description ingredients name').exec(callback);
 };
 
