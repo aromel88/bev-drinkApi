@@ -1,40 +1,21 @@
+import { handleQuery } from '../util/query';
+
 const models = require('../models');
 
 const Ingredient = models.Ingredient;
 
-const findIngredientById = (req, res) => {
-  const id = `${req.params.id}`;
-  return Ingredient.IngredientModel.findById(id, (err, doc) => {
-    if (err) {
-      console.dir(err);
-      return res.status(400).json({
-        status: 400,
-        message: 'Error in findIngredientByName',
-        error: err,
-      });
-    }
-    return res.json(doc);
-  });
+const fetch = (req, res) => {
+  const value = req.query.value;
+  return Ingredient.IngredientModel.fetch(value, (err, doc) => handleQuery(res, err, doc));
 };
 
-/**
- * handle GET request for ingredient by name
- * @param req - request object
- * @param res - response object
- */
-const findIngredientByName = (req, res) => {
-  const name = `${req.params.name}`;
-  return Ingredient.IngredientModel.findByName(name, (err, doc) => {
-    if (err) {
-      console.dir(err);
-      return res.status(400).json({
-        status: 400,
-        message: 'Error in findIngredientByName',
-        error: err,
-      });
-    }
-    return res.json(doc);
-  });
+const getIngredient = (req, res) => {
+  const id = req.query.id;
+  if (req.query.id) {
+    return Ingredient.IngredientModel.findById(id, (err, doc) => handleQuery(res, err, doc));
+  }
+  return Ingredient.IngredientModel.findByName(req.query.name || '', (err, doc) =>
+    handleQuery(res, err, doc));
 };
 
 /**
@@ -51,27 +32,18 @@ const makeIngredient = (req, res) => {
   }
 
   const ingredientData = {
-    brand: req.body.brand,
-    description: req.body.description,
-    name: req.body.name,
-    type: req.body.type,
+    brand: req.body.brand || '',
+    description: req.body.description || '',
+    name: req.body.name || '',
+    type: req.body.type || '',
   };
 
   const newIngredient = new Ingredient.IngredientModel(ingredientData);
-
-  return newIngredient.save((err, doc) => {
-    if (err) {
-      return res.status(400).json({
-        status: 400,
-        message: 'An error occurred saving ingredient data',
-        error: err,
-      });
-    }
-
-    return res.status(200).json(doc);
-  });
+  return newIngredient.save((err, doc) => handleQuery(res, err, doc));
 };
 
-module.exports.findIngredientById = findIngredientById;
-module.exports.findIngredientByName = findIngredientByName;
-module.exports.makeIngredient = makeIngredient;
+module.exports = {
+  fetch,
+  getIngredient,
+  makeIngredient,
+};

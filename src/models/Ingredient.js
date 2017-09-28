@@ -5,7 +5,6 @@ mongoose.Promise = global.Promise;
 
 let IngredientModel = {};
 
-// convert string ID to real mongo ID
 const convertId = mongoose.Types.ObjectId;
 const setName = name => _.escape(name).trim();
 
@@ -38,6 +37,12 @@ IngredientSchema.statics.toAPI = doc => ({
   brand: doc.brand,
   name: doc.name,
 });
+
+IngredientSchema.statics.fetch = (query, callback) => {
+  const searchRegExp = new RegExp(`^${query}`);
+  return IngredientModel.find()
+    .or([{ brand: searchRegExp }, { name: searchRegExp }]).exec(callback);
+};
 
 IngredientSchema.statics.findByName = (name, callback) => {
   return IngredientModel.findOne({ name }).select('brand description name type').exec(callback);

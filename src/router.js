@@ -1,11 +1,11 @@
 const controllers = require('./controllers');
 
 const router = (app) => {
-  app.get('/findDrinkByName/:name', controllers.Drink.findDrinkByName);
-  app.post('/makeDrink', controllers.Drink.makeDrink);
-  app.get('/findIngredientByName/:name', controllers.Ingredient.findIngredientByName);
-  app.get('/findIngredientById/:id', controllers.Ingredient.findIngredientById);
-  app.post('/makeIngredient', controllers.Ingredient.makeIngredient);
+  app.get('/drink', controllers.Drink.findDrinkByName);
+  app.post('/drink', controllers.Drink.makeDrink);
+  app.get('/ingredient', controllers.Ingredient.getIngredient);
+  app.post('/ingredient', controllers.Ingredient.makeIngredient);
+  app.get('/fetch', controllers.Ingredient.fetch);
 };
 
 module.exports = router;

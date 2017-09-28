@@ -1,6 +1,9 @@
+import { handleQuery } from '../util/query';
+
 const models = require('../models');
 
 const Drink = models.Drink;
+
 
 /**
  * handle GET request for drink by name
@@ -8,17 +11,8 @@ const Drink = models.Drink;
  * @param res - response object
  */
 const findDrinkByName = (req, res) => {
-  const name = `${req.params.name}`;
-  return Drink.DrinkModel.findByName(name, (err, doc) => {
-    if (err) {
-      return res.status(400).json({
-        status: 400,
-        message: 'Error in findDrinkByName',
-        error: err,
-      });
-    }
-    return res.status(200).json(doc);
-  });
+  const name = req.query.name;
+  return Drink.DrinkModel.findByName(name, (err, doc) => handleQuery(res, err, doc));
 };
 
 /**
@@ -43,18 +37,10 @@ const makeDrink = (req, res) => {
 
   const newDrink = new Drink.DrinkModel(drinkData);
 
-  return newDrink.save((err, doc) => {
-    if (err) {
-      return res.status(400).json({
-        status: 400,
-        message: 'An error occurred saving drink data',
-        error: err,
-      });
-    }
-
-    return res.status(200).json(doc);
-  });
+  return newDrink.save((err, doc) => handleQuery(res, err, doc));
 };
 
-module.exports.findDrinkByName = findDrinkByName;
-module.exports.makeDrink = makeDrink;
+module.exports = {
+  findDrinkByName,
+  makeDrink,
+};

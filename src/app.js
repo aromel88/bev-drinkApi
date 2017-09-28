@@ -12,7 +12,7 @@ mongoose.connect(dbURL, { useMongoClient: true })
     console.dir(err);
   });
 
-const port = process.env.PORT || process.env.NODE_PORT || 3000;
+const port = process.env.PORT || process.env.NODE_PORT || 8080;
 
 const app = express();
 app.use(bodyParser.urlencoded({
